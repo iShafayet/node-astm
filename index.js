@@ -4,15 +4,15 @@ var port = new SerialPort('COM4', {
   autoOpen: false
 });
 
-const ACK = new Buffer([6]);
-const ENQ = new Buffer([5]);
-const ETB = new Buffer([23]);
-const ETX = new Buffer([3]);
-const LF = new Buffer([10]);
-const CR = new Buffer([13]);
-const NAK = new Buffer([21]);
-const STX = new Buffer([2]);
-const EOT = new Buffer([4]);
+const ACK_BUFFER = new Buffer([6]);
+const ENQ = 5;
+// const ETB = new Buffer([23]);
+// const NAK = new Buffer([21]);
+const STX = 2;
+const ETX = 3;
+const LF = 10;
+const CR = 13;
+const EOT = 4;
 
 port.open(err => {
   if (err) {
@@ -28,29 +28,62 @@ port.on('open', _ => {
   console.log("PORT", "opened")
 });
 
-let logString = '';
-
-// Switches the port into "flowing mode"
+let transmission = []
+let statement = null
 port.on('data', function (data) {
-  console.log('Raw Data:', data);
+  // console.log('Raw Data:', data);
 
-  if (Buffer.compare(data, ENQ) === 0) {
-    port.write(ACK);
-    console.log('Acknowledged')
-  } else if (Buffer.compare(data, EOT) === 0) {
-    console.log('done (eot)')
-    console.log('FINAL STRING', logString)
+  let str = data.toString('ascii');
+
+  if (str.length === 0) return;
+
+  if (str.charCodeAt(0) === ENQ) {
+    statement = {
+      hasStarted: false,
+      hasEnded: false,
+      // lastChar: '',
+      dataMessage: '',
+      checksum: ''
+    }
+    port.write(ACK_BUFFER);
+
+  } else if (str.charCodeAt(0) === EOT) {
+    console.log('transmission', transmission);
+    transmission = [];
+
   } else {
-    let str = data.toString('ascii');
-    logString += str;
-    if (str.length >= 2){
-      let prelast = str.charCodeAt(str.length-2);
-      let last = str.charCodeAt(str.length-1);
-      if (prelast === 13 && last === 10){
-        console.log('line done (cr, lf)')
-        port.write(ACK);
+    for (char in str.split('')){
+      if (char.charCodeAt(0) === STX){
+        statement.hasStarted = true;
+
+      } else if (char.charCodeAt(0) === ETX){
+        if (!statement.hasStarted){
+          throw new Error("Statement ended before it was started.");
+        }
+        statement.hasEnded = true;
+
+      } else if (char.charCodeAt(0) === LF){
+        if (!statement.hasStarted){
+          throw new Error("LF before statement was started.");
+        }
+        if (!statement.hasEnded){
+          throw new Error("LF before statement was ended.");
+        }
+        transmission.push(statement);
+        port.write(ACK_BUFFER);
+
+      } else {
+        if (!statement.hasStarted){
+          throw new Error("Unkown character received before statement was started.", char, char.charCodeAt());
+        }
+        if (!statement.hasEnded){
+          statement.dataMessage += char;       
+        } else {
+          statement.checksum += char;
+        }
+
       }
-    }   
+    }
     
   }
 
