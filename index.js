@@ -1,5 +1,5 @@
 var SerialPort = require('serialport');
-var port = new SerialPort('COM2', {
+var port = new SerialPort('COM4', {
   baudRate: 38400,
   autoOpen: false
 });
@@ -39,11 +39,19 @@ port.on('data', function (data) {
     console.log('Acknowledged')
   } else if (Buffer.compare(data, EOT) === 0) {
     console.log('done (eot)')
+    console.log('FINAL STRING', logString)
   } else {
     let str = data.toString('ascii');
-    console.log(str);
     logString += str;
-    // port.write(ACK);
+    if (str.length >= 2){
+      let prelast = str.charCodeAt(str.length-2);
+      let last = str.charCodeAt(str.length-1);
+      if (prelast === 13 && last === 10){
+        console.log('line done (cr, lf)')
+        port.write(ACK);
+      }
+    }   
+    
   }
 
 });
