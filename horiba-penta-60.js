@@ -38,7 +38,7 @@ class HoribaPenta60 extends EventEmitter {
       }
     });
 
-    this.port.on('data', err => this.__handleData(data));
+    this.port.on('data', data => this.__handleData(data));
   }
 
   __log(...data) {
