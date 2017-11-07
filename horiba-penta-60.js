@@ -74,12 +74,12 @@ class HoribaPenta60 extends EventEmitter {
 
     } else if (str.charCodeAt(0) === EOT) {
       // console.log('this.transmission', this.transmission);
-      this.emit('data', transmission);
-      this.__log('transmission:', this.summarizeTransmission(transmission));
+      this.emit('data', this.transmission);
+      this.__log('transmission: \n', this.summarizeTransmission(this.transmission));
       this.transmission = [];
 
     } else {
-      for (char of str.split('')) {
+      for (let char of str.split('')) {
         // console.log(char, char.charCodeAt(0));
 
         if (char.charCodeAt(0) === STX) {
@@ -129,8 +129,8 @@ class HoribaPenta60 extends EventEmitter {
   }
 
   summarizeTransmission(transmission) {
-    text = '';
-    for (statement of transmission) {
+    let text = '';
+    for (let statement of transmission) {
       let dataMessage = statement.dataMessage;
       if (dataMessage.length > 0) {
         dataMessage = dataMessage.substr(1, dataMessage.length);
