@@ -1,9 +1,9 @@
 
 
 
-// let { HoribaPenta60Reader } = require('./horiba-penta-60-reader');
+// let { HoribaPentra60Reader } = require('./horiba-pentra-60-reader');
 
-// let machine = new HoribaPenta60Reader();
+// let machine = new HoribaPentra60Reader();
 
 // machine.on('log', (...args)=> {
 //   console.log(...args);
@@ -23,9 +23,9 @@
 
 // machine.initiate('COM4');
 
-let { HoribaPenta60Parser } = require('./horiba-penta-60-parser');
+let { HoribaPentra60Parser } = require('./horiba-pentra-60-parser');
 
-let parser = new HoribaPenta60Parser();
+let parser = new HoribaPentra60Parser();
 
 let results = parser.parse(`
 1H|\^&|||ABX|||||||P|E1394-97|20060210061533

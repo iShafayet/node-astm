@@ -10,7 +10,7 @@ const LF = 10;
 const CR = 13;
 const EOT = 4;
 
-class HoribaPenta60Reader extends EventEmitter {
+class HoribaPentra60Reader extends EventEmitter {
 
   constructor() {
     super();
@@ -42,7 +42,7 @@ class HoribaPenta60Reader extends EventEmitter {
   }
 
   __log(...data) {
-    data.unshift('HoribaPenta60>');
+    data.unshift('HoribaPentra60>');
     this.emit('log', ...data);
   }
 
@@ -144,4 +144,4 @@ class HoribaPenta60Reader extends EventEmitter {
 
 }
 
-exports.HoribaPenta60Reader = HoribaPenta60Reader;
+exports.HoribaPentra60Reader = HoribaPentra60Reader;

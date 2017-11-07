@@ -1,5 +1,5 @@
 
-class HoribaPenta60Parser {
+class HoribaPentra60Parser {
 
   __parseTestResult(line) {
     let parts = line.split('|');
@@ -89,4 +89,4 @@ class HoribaPenta60Parser {
 
 }
 
-exports.HoribaPenta60Parser = HoribaPenta60Parser;
+exports.HoribaPentra60Parser = HoribaPentra60Parser;
