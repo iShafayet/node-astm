@@ -74,7 +74,7 @@ port.on('data', function (data) {
 
       } else {
         if (!statement.hasStarted){
-          throw new Error("Unkown character received before statement was started.", char, char.charCodeAt());
+          throw new Error(`Unkown character received before statement was started, ${char}, ${char.charCodeAt()}`);
         }
         if (!statement.hasEnded){
           statement.dataMessage += char;       
