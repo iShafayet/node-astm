@@ -50,7 +50,7 @@ class HoribaPentra60Reader extends EventEmitter {
     this.emit('error', err);
   }
 
-  __parseError(err){
+  __parseError(err) {
     this.emit('parse-error', err);
   }
 
