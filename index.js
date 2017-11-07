@@ -53,6 +53,8 @@ port.on('data', function (data) {
 
   } else {
     for (char in str.split('')){
+      console.log(char, char.charCodeAt(0));
+      
       if (char.charCodeAt(0) === STX){
         statement.hasStarted = true;
 
