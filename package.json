@@ -1,0 +1,19 @@
+{
+  "name": "node-astm",
+  "version": "0.0.1",
+  "description": "Read data from ASTM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iShafayet/node-astm.git"
+  },
+  "author": "Sayem Shafayet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iShafayet/node-astm/issues"
+  },
+  "homepage": "https://github.com/iShafayet/node-astm#readme"
+}
