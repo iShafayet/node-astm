@@ -28,6 +28,14 @@ port.on('open', _ => {
   console.log("PORT", "opened")
 });
 
+let summarizeTransmission = (transmission)=>{
+  text = '';
+  for (statement of transmission){
+    text += statement.dataMessage + '\n';
+  }
+  return text;
+};
+
 let transmission = []
 let statement = null
 port.on('data', function (data) {
@@ -38,55 +46,57 @@ port.on('data', function (data) {
   if (str.length === 0) return;
 
   if (str.charCodeAt(0) === ENQ) {
-    statement = {
-      hasStarted: false,
-      hasEnded: false,
-      // lastChar: '',
-      dataMessage: '',
-      checksum: ''
-    }
     port.write(ACK_BUFFER);
 
   } else if (str.charCodeAt(0) === EOT) {
-    console.log('transmission', transmission);
+    // console.log('transmission', transmission);
+    console.log(summarizeTransmission(transmission));
     transmission = [];
 
   } else {
-    for (char in str.split('')){
-      console.log(char, char.charCodeAt(0));
-      
-      if (char.charCodeAt(0) === STX){
+    for (char of str.split('')) {
+      // console.log(char, char.charCodeAt(0));
+
+      if (char.charCodeAt(0) === STX) {
+        statement = {
+          hasStarted: false,
+          hasEnded: false,
+          // lastChar: '',
+          dataMessage: '',
+          checksum: ''
+        }
         statement.hasStarted = true;
 
-      } else if (char.charCodeAt(0) === ETX){
-        if (!statement.hasStarted){
+      } else if (char.charCodeAt(0) === ETX) {
+        if (!statement.hasStarted) {
           throw new Error("Statement ended before it was started.");
         }
         statement.hasEnded = true;
 
-      } else if (char.charCodeAt(0) === LF){
-        if (!statement.hasStarted){
+      } else if (char.charCodeAt(0) === LF) {
+        if (!statement.hasStarted) {
           throw new Error("LF before statement was started.");
         }
-        if (!statement.hasEnded){
+        if (!statement.hasEnded) {
           throw new Error("LF before statement was ended.");
         }
         transmission.push(statement);
         port.write(ACK_BUFFER);
 
       } else {
-        if (!statement.hasStarted){
+        if (!statement.hasStarted) {
           throw new Error(`Unkown character received before statement was started, ${char}, ${char.charCodeAt()}`);
         }
-        if (!statement.hasEnded){
-          statement.dataMessage += char;       
-        } else {
-          statement.checksum += char;
+        if (char.charCodeAt(0) !== CR) {
+          if (!statement.hasEnded) {
+            statement.dataMessage += char;
+          } else {
+            statement.checksum += char;
+          }
         }
-
       }
     }
-    
+
   }
 
 });
