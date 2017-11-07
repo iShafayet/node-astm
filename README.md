@@ -76,3 +76,6 @@ machine.on('data', (transmission) => {
 machine.initiate('COM4');
 ```
 
+# LICENCE
+
+[MIT](LICENSE)
