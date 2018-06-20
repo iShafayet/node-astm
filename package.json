@@ -1,6 +1,6 @@
 {
   "name": "node-astm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Read data from ASTM",
   "main": "index.js",
   "scripts": {
