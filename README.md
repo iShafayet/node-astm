@@ -4,14 +4,14 @@
 
 It outputs easy to process string data. You don't need to deal with buffers at all.
 
-If you are looking for adding support to other devices, create an issue. I will be more than happy to help.
+If you are looking for adding support to other devices, simply fork this repo and modify one of the readers and parsers for your purposes. If you need help, create an issue. I will be more than happy to give you pointers.
 
 Pull requests are always welcome.
 
 # Installation
 
 ```bash
-npm install node-astm --save
+npm install node-astm
 ```
 
 # API & Usage
